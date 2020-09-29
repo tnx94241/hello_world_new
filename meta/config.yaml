@@ -1,0 +1,24 @@
+build:
+    os: linux
+    arch: x86
+    sign_key: private_key.pem
+    sign_certificate: sp-client.pem
+    remove_non_regular_files: True
+
+publish:
+    url: staging-fusion.westeurope.cloudapp.azure.com
+    service_uid: # Your Service UID from the Cloud
+    tls_key: private_key.pem
+    tls_certificate: sp-client.pem
+    version: "1.1"
+
+configuration:
+    state:
+        filename: state.dat
+        required: False
+
+    cmd: python3 vis_client_example.py
+    hostname: 'service-hello-world.local'
+    workingDir: '/'
+    env:
+        - WEBHOOK_SITE=

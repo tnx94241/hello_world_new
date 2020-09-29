@@ -13,10 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
 import time
 import logging
-
-import requests
+from urllib import request
+import json
 
 from aos_vis_client import VISClient, VISDataSubscription, VISDataAccessor
 
@@ -26,7 +27,7 @@ logger = logging.getLogger(__name__)
 VIS_URL = "wss://wwwivi:8088/"
 
 # Go to https://webhook.site/#/ copy and paste server link to HTTP_REQUEST_RECEIVER_URL
-HTTP_REQUEST_RECEIVER_URL = "<replace with your url>"
+HTTP_REQUEST_RECEIVER_URL = os.environ.get('WEBHOOK_SITE')
 
 DATA_SENDING_DELAY = 2
 WAIT_TIMEOUT = 5
@@ -46,15 +47,21 @@ def main():
         client.register_vis_data(telemetry_sub)
         telemetry_sub.send_subscribe_action()
 
+        if len(HTTP_REQUEST_RECEIVER_URL) == 0:
+            raise Exception('webhook site not set.')
+
         # Send information received from VIS to HTTP server.
         while True:
             try:
                 logger.info("Sending telemetry to '{url}'".format(url=HTTP_REQUEST_RECEIVER_URL))
-                requests.post(
-                    url=HTTP_REQUEST_RECEIVER_URL,
-                    json={"vin": vin, "telemetry": telemetry_sub.get_value(wait_timeout=WAIT_TIMEOUT)}
+                data = {"vin": vin, "telemetry": telemetry_sub.get_value(wait_timeout=WAIT_TIMEOUT)}
+                params = json.dumps(data).encode('utf8')
+                request_data = request.Request(
+                    HTTP_REQUEST_RECEIVER_URL,
+                    data=params,
+                    headers={'content-type': 'application/json'}
                 )
-
+                request.urlopen(request_data)
                 time.sleep(DATA_SENDING_DELAY)
             except KeyboardInterrupt:
                 logger.info("Received Keyboard interrupt. shutting down")
