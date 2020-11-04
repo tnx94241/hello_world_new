@@ -7,7 +7,7 @@ build:
 
 publish:
     url: staging-fusion.westeurope.cloudapp.azure.com
-    service_uid: # Your Service UID from the Cloud
+    service_uid: e374871a-70fe-431e-84fb-c350f8a8fa33
     tls_key: private_key.pem
     tls_certificate: sp-client.pem
     version: "1.1"
@@ -21,4 +21,4 @@ configuration:
     hostname: 'service-hello-world.local'
     workingDir: '/'
     env:
-        - WEBHOOK_SITE=
+            - WEBHOOK_SITE=https://webhook.site/9bbcd445-9a2c-49ba-9df8-dadd8422e859

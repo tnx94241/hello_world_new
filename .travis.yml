@@ -6,4 +6,6 @@ install:
 script:
 - aos-signer sign
 - aos-signer upload
-
+dd:
+- openssl aes-256-cbc -K $encrypted_f56877b95bbb_key -iv $encrypted_f56877b95bbb_iv
+  -in meta/private_key.pem.enc -out meta/private_key.pem -d
