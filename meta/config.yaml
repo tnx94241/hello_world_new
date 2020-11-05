@@ -21,4 +21,4 @@ configuration:
     hostname: 'service-hello-world.local'
     workingDir: '/'
     env:
-        - WEBHOOK_SITE=https://webhook.site/4a35fde2-5805-4401-bc47-d8b306f931c7
+        - WEBHOOK_SITE = https://webhook.site/4a35fde2-5805-4401-bc47-d8b306f931c7
